@@ -425,19 +425,24 @@
     });  
 
     // =================== قراءة اسم المدعو (مع دعم التحديث) ===================  
-    const urlParams = new URLSearchParams(window.location.search);  
-    let guestName = 'علياء'; // الاسم الافتراضي  
+    const urlParams = new URLSearchParams(window.location.search);
+let guestName = 'علياء';
 
-    // 1. محاولة استرجاع الاسم من الذاكرة المؤقتة (Session Storage)  
-    if (urlParams.has('guest')) {
-    const rawGuestName = urlParams.get('guest');
+if (urlParams.has('guest')) {
+    const encodedName = urlParams.get('guest');
 
-    if (rawGuestName && rawGuestName.trim() !== "") {
-        guestName = rawGuestName.trim();
+    if (encodedName && encodedName.trim() !== "") {
+        try {
+            guestName = decodeURIComponent(
+                escape(atob(encodedName))
+            );
+        } catch (e) {
+            guestName = 'علياء';
+        }
     }
 }
 
-    document.getElementById('guestName').innerText = `اسم المدعو/ة: ${guestName}`;  
+document.getElementById('guestName').innerText = `اسم المدعو/ة: ${guestName}`;  
     // ====================================================================================  
 
     let enterBtn = document.getElementById("enterBtn"),  
